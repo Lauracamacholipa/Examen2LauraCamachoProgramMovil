@@ -1,4 +1,4 @@
-// DollarScreen.kt
+// DollarScreen.kt - ACTUALIZADO
 package com.calyrsoft.ucbp1.features.dollar.presentation
 
 import androidx.compose.foundation.layout.Arrangement
@@ -94,8 +94,7 @@ fun DollarScreen(
                 }
 
                 is DollarViewModel.DollarUIState.Success -> {
-                    // Card con valores actuales
-                    CurrentDollarCard(dollar = stateValue.data)
+                    ImprovedDollarCards(dollar = stateValue.data)
 
                     Spacer(modifier = Modifier.height(24.dp))
 
@@ -115,67 +114,132 @@ fun DollarScreen(
 }
 
 @Composable
-fun CurrentDollarCard(dollar: DollarModel) {
-    Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-        ),
-        modifier = Modifier.fillMaxWidth()
+fun ImprovedDollarCards(dollar: DollarModel) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
+        Card(
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color(0xFFE3F2FD), // Azul claro
+                contentColor = Color(0xFF0D47A1) // Azul oscuro
+            ),
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                text = "Valor Actual",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+            Column(
+                modifier = Modifier.padding(16.dp)
             ) {
-                DollarValueItem(
-                    title = "Dólar Oficial",
-                    value = dollar.dollarOfficial ?: "N/A",
-                    color = MaterialTheme.colorScheme.primary
+                Text(
+                    text = "💵 DÓLAR OFICIAL",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF0D47A1)
                 )
 
-                DollarValueItem(
-                    title = "Dólar Paralelo",
-                    value = dollar.dollarParallel ?: "N/A",
-                    color = MaterialTheme.colorScheme.secondary
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    DollarValueItemImproved(
+                        title = "COMPRA",
+                        value = String.format("%.2f", dollar.oficialCompra),
+                        color = Color(0xFF1B5E20) // Verde
+                    )
+
+                    DollarValueItemImproved(
+                        title = "VENTA",
+                        value = String.format("%.2f", dollar.oficialVenta),
+                        color = Color(0xFFB71C1C) // Rojo
+                    )
+                }
+            }
+        }
+
+        Card(
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color(0xFFF3E5F5), // Morado claro
+                contentColor = Color(0xFF4A148C) // Morado oscuro
+            ),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = "DÓLAR PARALELO",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF4A148C)
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    DollarValueItemImproved(
+                        title = "COMPRA",
+                        value = String.format("%.2f", dollar.paraleloCompra),
+                        color = Color(0xFF1B5E20) // Verde
+                    )
+
+                    DollarValueItemImproved(
+                        title = "VENTA",
+                        value = String.format("%.2f", dollar.paraleloVenta),
+                        color = Color(0xFFB71C1C) // Rojo
+                    )
+                }
+            }
+        }
+
+        Card(
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "🕒 ",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = "Actualizado: ${dollar.fechaActualizacion}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "Actualizado: ${getCurrentTime()}",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-            )
         }
     }
 }
 
 @Composable
-fun DollarValueItem(title: String, value: String, color: Color) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+fun DollarValueItemImproved(title: String, value: String, color: Color) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.Bold,
             color = color.copy(alpha = 0.8f)
         )
 
+        Spacer(modifier = Modifier.height(4.dp))
+
         Text(
             text = "$$value",
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             color = color
         )
@@ -196,51 +260,68 @@ fun DollarHistoryList(history: List<DollarModel>) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(history) { dollar ->
-                DollarHistoryItem(dollar = dollar)
+                ImprovedDollarHistoryItem(dollar = dollar)
             }
         }
     }
 }
 
 @Composable
-fun DollarHistoryItem(dollar: DollarModel) {
+fun ImprovedDollarHistoryItem(dollar: DollarModel) {
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier.padding(12.dp)
         ) {
-            Column {
+            Text(
+                text = formatDate(dollar.timestamp),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Oficial
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(
-                    text = formatDate(dollar.timestamp),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    text = "Oficial Compra: $${String.format("%.2f", dollar.oficialCompra)}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF1B5E20)
                 )
+                Text(
+                    text = "Oficial Venta: $${String.format("%.2f", dollar.oficialVenta)}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFFB71C1C)
+                )
+            }
 
-                Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
-                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Text(
-                        text = "Oficial: $${dollar.dollarOfficial ?: "N/A"}",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-
-                    Text(
-                        text = "Paralelo: $${dollar.dollarParallel ?: "N/A"}",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
+            // Paralelo
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Paralelo Compra: $${String.format("%.2f", dollar.paraleloCompra)}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF1B5E20)
+                )
+                Text(
+                    text = "Paralelo Venta: $${String.format("%.2f", dollar.paraleloVenta)}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFFB71C1C)
+                )
             }
         }
     }
 }
 
-// Funciones de utilidad
 private fun getCurrentTime(): String {
     return SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(Date())
 }

@@ -7,14 +7,16 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "dollars")
 data class DollarEntity(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    var id: Int = 0,
+    val id: Int = 0,
 
-    @ColumnInfo(name = "dollar_official")
-    var dollarOfficial: String? = null,
+    val dollarOfficial: String? = null,
+    val dollarParallel: String? = null,
 
-    @ColumnInfo(name = "dollar_parallel")
-    var dollarParallel: String? = null,
+    val oficialCompra: Double = 0.0,
+    val oficialVenta: Double = 0.0,
+    val paraleloCompra: Double = 0.0,
+    val paraleloVenta: Double = 0.0,
+    val fechaActualizacion: String = "",
 
-    @ColumnInfo(name = "timestamp")
-    var timestamp: Long = 0)
+    val timestamp: Long = 0L
+)

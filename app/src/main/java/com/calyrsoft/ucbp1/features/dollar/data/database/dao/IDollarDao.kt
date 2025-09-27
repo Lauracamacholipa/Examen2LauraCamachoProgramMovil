@@ -12,13 +12,13 @@ interface IDollarDao {
     @Query("SELECT * FROM dollars")
     suspend fun getList(): List<DollarEntity>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(dollar: DollarEntity)
 
     @Query("DELETE FROM dollars")
     suspend fun deleteAll()
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDollars(lists: List<DollarEntity>)
 
     @Query("SELECT * FROM dollars ORDER BY timestamp DESC")
@@ -26,4 +26,7 @@ interface IDollarDao {
 
     @Query("DELETE FROM dollars WHERE id = :id")
     suspend fun deleteById(id: Int)
+
+    @Query("SELECT * FROM dollars WHERE timestamp >= :startDate ORDER BY timestamp DESC")
+    suspend fun getHistoricalRates(startDate: Long): List<DollarEntity>
 }
